@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autenticacao.Web", "Autenticacao.Web\Autenticacao.Web.csproj", "{4826E1D0-94C8-4FE8-95F9-90E5504B9594}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4826E1D0-94C8-4FE8-95F9-90E5504B9594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4826E1D0-94C8-4FE8-95F9-90E5504B9594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4826E1D0-94C8-4FE8-95F9-90E5504B9594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4826E1D0-94C8-4FE8-95F9-90E5504B9594}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
