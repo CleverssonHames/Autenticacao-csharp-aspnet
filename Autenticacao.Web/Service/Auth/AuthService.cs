@@ -1,79 +1,52 @@
-﻿using Autenticacao.Web.Db;
-using Autenticacao.Web.Dto.Auth;
+﻿using Autenticacao.Web.Dto.Auth;
 using Autenticacao.Web.Models.Auth;
-using MySql.Data.MySqlClient;
-using System.Text;
+using Autenticacao.Web.Repositories.Auth;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace Autenticacao.Web.Service.Auth
 {
     public class AuthService
     {
-        private Database _db = new Database();
+        private readonly AuthRepository _authRepositorie;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AuthService(AuthRepository authRepository, IHttpContextAccessor httpContextAccessor)
+        {
+            _authRepositorie = authRepository;
+            _httpContextAccessor = httpContextAccessor;
+        }
         public Usuario Login(string email, string senha)
         {
-            var usuario = new Usuario();
-            var sql = "SELECT * FROM usuario WHERE email = @email AND senha = @senha";
 
-            using (MySqlConnection con = _db.GetConnection())
+            var user = _authRepositorie.Login(email, senha);
+
+            if (user.id == null)
+                return user;
+
+
+            var claims = new List<Claim>
             {
-                try
-                {
-                    con.Open();
-                    MySqlCommand cmd = con.CreateCommand();
-
-                    cmd.CommandText = sql;
-                    cmd.Parameters.AddWithValue("@email", email);
-                    cmd.Parameters.AddWithValue("@senha", senha);
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        if (dr.Read())
-                        {
-                            usuario.id = dr.GetGuid("idusuario");
-                            usuario.nome = dr.GetString("nome");
-                            usuario.email = dr.GetString("email");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                con.Close();
-            }
-            return usuario;
-        }
-
-        public void Register(RegistroUsuarioDto user)
-        {
-            var newUser = new Usuario
-            {
-                nome = user.nome,
-                email = user.email,
-                senha = Encoding.UTF8.GetBytes(user.senha)
+                new Claim(ClaimTypes.Name, user.nome),
+                new Claim(ClaimTypes.Email, user.email),
+                new Claim(ClaimTypes.NameIdentifier, user.id.ToString())
             };
 
-            var sql = "INSERT INTO usuario (idusuario, nome, email, senha, datacadastro) VALUES (@id, @nome, @email, @senha, @datacadastro)";
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
 
-            using (MySqlConnection con = _db.GetConnection())
-            {
-                con.Open();
-                try
-                {
-                    MySqlCommand cmd = con.CreateCommand();
-                    cmd.CommandText = sql;
-                    cmd.Parameters.AddWithValue("@id", newUser.id);
-                    cmd.Parameters.AddWithValue("@nome", newUser.nome);
-                    cmd.Parameters.AddWithValue("@email", newUser.email);
-                    cmd.Parameters.AddWithValue("@senha", newUser.senha);
-                    cmd.Parameters.AddWithValue("@datacadastro", newUser.DataCadastro);
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                con.Close();
-            }
+            _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return user;
+        }
+        public Usuario Register(RegistroUsuarioDto user)
+        {
+           return _authRepositorie.Register(user);
+        }
+
+        public void Logout()
+        {
+            _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }
