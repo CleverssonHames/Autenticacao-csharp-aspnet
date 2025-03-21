@@ -1,7 +1,28 @@
+using Autenticacao.Web.Repositories.Auth;
+using Autenticacao.Web.Repositories.Db;
+using Autenticacao.Web.Repositories.Task;
+using Autenticacao.Web.Service.Auth;
+using Autenticacao.Web.Service.Task;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<TaskRepository>();
+builder.Services.AddTransient<Database>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
+    });
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

@@ -1,31 +1,55 @@
-﻿using Autenticacao.Web.Service.Task;
+﻿using Autenticacao.Web.Dto.Tarefa;
+using Autenticacao.Web.Repositories.Task;
+using Autenticacao.Web.Service.Task;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autenticacao.Web.Controllers
 {
+    [Authorize]
     public class TarefasController : Controller
     {
-        private TerefaServices _taskService = new TerefaServices();
+        private readonly TaskService _taskService;
+
+        public TarefasController(TaskService taskService)
+        {
+            _taskService = taskService;
+        }
         public IActionResult Index(string idUsuario)
         {
-            var model = _taskService.ListarTarefas(idUsuario);
+            var model = _taskService.ListTask(idUsuario);
 
             return View(model);
         }
 
-        public IActionResult AddTask()
+        [HttpPost]
+        public IActionResult AddTask(AddTaskDto request)
         {
-            return View();
+            
+            if (ModelState.IsValid == false) 
+            {
+                var model = _taskService.ListTask(request.IdUsuario);
+                return View("Index", model);
+            }
+
+            var ret = _taskService.AddTask(request);
+
+            return RedirectToAction("Index", ret);
         }
 
-        public IActionResult UpdateTask()
+        public IActionResult CheckTask(string id)
         {
-            return View();
+            var result = _taskService.CheckTask(id);
+
+            return Json(result);
         }
 
-        public IActionResult DeleteTask()
+        [HttpPost]
+        public IActionResult DeleteTask(string id)
         {
-            return View();
+            var result = _taskService.DeleteTask(id);
+
+            return Json(result);
         }   
     }
 }

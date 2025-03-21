@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace Autenticacao.Web.Db
+namespace Autenticacao.Web.Repositories.Db
 {
     public class Database
     {
