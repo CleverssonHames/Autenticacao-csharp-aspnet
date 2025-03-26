@@ -10,7 +10,6 @@ namespace Autenticacao.Web.Controllers
     public class TarefasController : Controller
     {
         private readonly TaskService _taskService;
-
         public TarefasController(TaskService taskService)
         {
             _taskService = taskService;
@@ -21,7 +20,6 @@ namespace Autenticacao.Web.Controllers
 
             return View(model);
         }
-
         [HttpPost]
         public IActionResult AddTask(AddTaskDto request)
         {
@@ -36,14 +34,12 @@ namespace Autenticacao.Web.Controllers
 
             return RedirectToAction("Index", ret);
         }
-
         public IActionResult CheckTask(string id)
         {
             var result = _taskService.CheckTask(id);
 
             return Json(result);
         }
-
         [HttpPost]
         public IActionResult DeleteTask(string id)
         {

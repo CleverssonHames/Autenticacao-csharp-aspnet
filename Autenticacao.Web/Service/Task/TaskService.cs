@@ -14,9 +14,9 @@ namespace Autenticacao.Web.Service.Task
         }
         public TarefasViewModel AddTask(AddTaskDto task)
         {
-            var ret = _taskRepository.AddTask(task);
-
             var tasks = _taskRepository.ListTask(task.IdUsuario);
+
+            var ret = _taskRepository.AddTask(task);
 
             ret.Tarefas = tasks.Tarefas;
 

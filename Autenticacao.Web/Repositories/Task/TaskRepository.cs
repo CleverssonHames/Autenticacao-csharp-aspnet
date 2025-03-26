@@ -109,7 +109,7 @@ namespace Autenticacao.Web.Repositories.Task
         public TarefasViewModel ListTask(string idUsuario)
         {
             var ret = new TarefasViewModel();
-            var sql = "SELECT Id, Descricao, Concluida, DataCriacao FROM tarefas WHERE IdUsuario = @IdUsuario order by 1";
+            var sql = "SELECT Id, Descricao, Concluida, DataCriacao FROM tarefas WHERE IdUsuario = @IdUsuario order by DataCriacao desc";
 
             using (MySqlConnection con = _db.GetConnection())
             {
