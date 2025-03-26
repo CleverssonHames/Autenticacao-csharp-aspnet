@@ -18,7 +18,7 @@ Ele sugeriu o Entity Framework, mas eu queria fazer esse sem usar o entity.
 
 Esse projeto não esta separado em cadamadas, foi um projeto mais simples com relação a arquitetura, criei umas divisões por pastas apenas para ficar mais organizado.
 
-Aprendi com esse projeto a fazer um CRUD sem as facilidades do Entity Framework, fiz validações utilizando o Model.IsValid no controlador, criei view models para exibição de dados, fiz injeção de dopendencia sem interface.
+Aprendi com esse projeto a fazer um CRUD sem as facilidades do Entity Framework, fiz validações utilizando o Model.IsValid no controlador, criei viewmodels para exibição de dados, fiz injeção de dopendencia sem interface.
 Enfim, sei que o código não está em nível profissional, mas pra fins de aprendizado para esse primeiro projeto eu achei valido.
 
 Caso queira baixar e testar, vou deixar abaixo aquery de criação das tabelas usadas no mysql, para facilitar.
