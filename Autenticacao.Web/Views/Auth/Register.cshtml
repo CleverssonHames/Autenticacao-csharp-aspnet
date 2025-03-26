@@ -1,51 +1,61 @@
 ﻿@using Autenticacao.Web.Dto.Auth
 @model RegistroUsuarioDto
 @{
-    ViewBag.Title = "Cadastro de Usuário";
+    ViewData["Title"] = "Registrar";
 }
+<div class="container-fluid vh-100 g-0 position-relative">
+    <div class="d-flex flex-column h-100">
+        <div class="bg-fundo flex-grow-1"></div>
+        <div class="flex-grow-1 position-relative bg-gradient-rb">
+            <img src="~/img/auth/img-auth.jpg" class="base-image">
+        </div>
+    </div>
+    <div class="position-absolute top-50 start-50 translate-middle w-100">
+        <div class="row justify-content-center g-0">
+            <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+                @if (ViewBag.Erro != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Ops!</strong> @ViewBag.Erro
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <div class="card shadow-lg bg-fundo-box">
+                    <div class="card-header bg-fundo-box border-0 text-white text-center">
+                        <h3 class="text-white text-center display-5">Registre-se</h3>
+                    </div>
+                    <div class="card-body ">
+                        <form action="@Url.Action("Cadastrar", "Auth")" method="post" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="Nome" class="form-label text-cinza-claro">Nome</label>
+                                <input type="text" id="Nome" name="nome" class="form-control bg-cinza-claro" value="@Model?.nome" />
+                                <span class="text-danger">@Html.ValidationMessage("Nome")</span>
+                            </div>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>Cadastro de Usuário</h3>
-                </div>
-                <div class="card-body">
-                    @if (TempData["Mensagem"] != null)
-                    {
-                        <div class="alert alert-success">@TempData["Mensagem"]</div>
-                    }
+                            <div class="mb-3">
+                                <label for="Email" class="form-label text-cinza-claro">E-mail</label>
+                                <input type="email" id="Email" name="email" class="form-control bg-cinza-claro" value="@Model?.email" />
+                                <span class="text-danger">@Html.ValidationMessage("Email")</span>
+                            </div>
 
-                    <form action="@Url.Action("Cadastrar", "Auth")" method="post" class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="Nome" class="form-label">Nome</label>
-                            <input type="text" id="Nome" name="nome" class="form-control" value="@Model?.nome" />
-                            <span class="text-danger">@Html.ValidationMessage("Nome")</span>
-                        </div>
+                            <div class="mb-3">
+                                <label for="senha" class="form-label text-cinza-claro">Senha</label>
+                                <input type="password" id="senha" name="senha" class="form-control bg-cinza-claro" required />
+                                <span class="text-danger">@Html.ValidationMessage("senha")</span>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="Email" class="form-label">E-mail</label>
-                            <input type="email" id="Email" name="email" class="form-control"  value="@Model?.email" />
-                            <span class="text-danger">@Html.ValidationMessage("Email")</span>
-                        </div>
+                            <div class="mb-3">
+                                <label for="confirmaSenha" class="form-label text-cinza-claro">Confirmar senha</label>
+                                <input type="password" id="confirmaSenha" name="confirmaSenha" class="form-control bg-cinza-claro" required />
+                                <span class="text-danger">@Html.ValidationMessage("confirmaSenha")</span>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="senha" class="form-label">Senha</label>
-                            <input type="password" id="senha" name="senha" class="form-control" required />
-                            <span class="text-danger">@Html.ValidationMessage("senha")</span>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="confirmaSenha" class="form-label">Confirmar senha</label>
-                            <input type="password" id="confirmaSenha" name="confirmaSenha" class="form-control" required />
-                            <span class="text-danger">@Html.ValidationMessage("confirmaSenha")</span>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        </div>
-                    </form>
+                            <div class="d-flex justify-content-between">
+                                <a href="@Url.Action("Login", "Auth")" class="btn btn-link text-white">Já tenho uma conta</a>
+                                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
