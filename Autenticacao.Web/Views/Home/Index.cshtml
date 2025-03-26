@@ -1,9 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-2 fw-semibold text-start">Organize Seu Dia, Aumente Sua Produtividade!</h1>
-    <h6 class="display-6">Bem-vindo ao To-Do List – a ferramenta ideal para você planejar, organizar e concluir suas tarefas de forma simples e eficiente.</h6>
-    <p class="lead">Comece agora e transforme sua rotina! 🚀</p>
+<div id="home" class="container-fluid g-0">
+    <div id="overlay">
+        <div class="d-flex justify-content-between align-items-center px-2 py-4">
+            <span class="text-white fs-2 font-julee">TODO</span>
+            <a href="/Auth/Login" class="btn bg-verde">Faça o login</a>
+        </div>
+        <div class="container">
+            <div class="text-center">
+                <h1 class="display-3 fw-semibold text-start text-white mb-5">Organize Seu Dia, <br>Aumente Sua Produtividade!</h1>
+                <h6 class="fs-2 fw-normal text-cinza-claro text-start w-50 mb-5">Bem-vindo ao <span class="font-julee text-white">TODO</span> a ferramenta ideal para você planejar, organizar e concluir suas tarefas de forma simples e eficiente.</h6>
+                <p class="lead text-white text-start mb-3">Comece agora e transforme sua rotina! 🚀</p>
+                <a href="/Auth/Register" class="btn bg-verde float-start">Registre-se agora mesmo!</a>
+            </div>
+        </div>
+    </div>
 </div>
