@@ -2,9 +2,6 @@
 
 - [x] Projeto concluido
 
-![Uploading image.png…]()
-
-
 Primeiro, a idéia desse projeto surgiu quando eu solicitei ao chatgpt projetos de estudo para a linguagem C# usando ASP.NET e MVC, e o chatgpt me sugeriu 5 projetos e esse é o primeiro.
 
 **Tecnologogias:**
