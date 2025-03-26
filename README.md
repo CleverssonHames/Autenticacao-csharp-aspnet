@@ -1,20 +1,20 @@
-Projeto 1 de 5 para estudos.
- 
-Projeto gerenciador de tarefas
+# 1 - Projeto gerenciador de tarefas
+
+- [x] Projeto concluido
 
 Primeiro, a idéia desse projeto surgiu quando eu solicitei ao chatgpt projetos de estudo para a linguagem C# usando ASP.NET e MVC, e o chatgpt me sugeriu 5 projetos e esse é o primeiro.
 
-Tecnologogias:
-ASP.NET MVC
-MYSQL
-BOOTSTRAP
+**Tecnologogias:**
+- ASP.NET MVC
+- MYSQL
+- BOOTSTRAP
 
 Ele sugeriu o Entity Framework, mas eu queria fazer esse sem usar o entity.
 
-Funcionalidades:
-CRUD de tarefas
-Filtro por status
-Autenticação de diferentes usuários
+**Funcionalidades:**
+- CRUD de tarefas
+- Filtro por status
+- Autenticação de diferentes usuários
 
 Esse projeto não separado em cadamadas, foi um projeto mais simples com relação a arquitetura, criei umas divisões por pastas apenas para ficar mais organizado.
 
@@ -23,6 +23,8 @@ Enfim, sei que o código não está em nível profissional, mas pra fins de apre
 
 Caso queira baixar e testar, vou deixar abaixo aquery de criação das tabelas usadas no mysql, para facilitar.
 
+**Tabela tarefas**
+```
 CREATE TABLE `tarefas` (
   `Id` char(36) NOT NULL,
   `IdUsuario` char(36) NOT NULL,
@@ -32,7 +34,10 @@ CREATE TABLE `tarefas` (
   `DataAlteracao` datetime DEFAULT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+```
 
+**Tabela usuario**
+```
 CREATE TABLE `usuario` (
   `idusuario` char(36) NOT NULL,
   `nome` varchar(45) NOT NULL,
@@ -42,3 +47,4 @@ CREATE TABLE `usuario` (
   `datacadastro` datetime NOT NULL,
   PRIMARY KEY (`idusuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+```
