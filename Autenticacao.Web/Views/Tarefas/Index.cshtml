@@ -1,86 +1,113 @@
 ﻿@using Autenticacao.Web.Models.ViewModel
 @using System.Text.Json
 @model TarefasViewModel
-
 @{
     ViewData["Title"] = "Manager";
 }
-@if (Model.status == false)
-{   
-    <script>
-        alert('@Model.mensagem');
-    </script>
-}
-<div class="container">
-    <p>Lista de tarefas</p>
-    <form asp-controller="Tarefas" asp-action="AddTask" method="post">
-        <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
-        <div class="row">
-            <div class="col-10">
-                <div class="d-flex flex-column gap-1">
-                    <input type="text" name="descricao" />
-                    <span class="text-danger">@Html.ValidationMessage("descricao")</span>
+<div id="page-task" class="container-fluid vh-100 g-0 position-relative">
+    <div class="d-flex flex-column h-100">
+        <div class="bg-fundo h-35 position-relative bg-gradient-rb">
+            <img src="~/img/tarefas/img-task.png" class="base-image">
+        </div>
+        <div class="flex-grow-1 bg-fundo">
+            
+        </div>
+    </div>
+    <div class="position-absolute top-55 start-50 translate-middle w-100 h-75">
+        <div class="row justify-content-center g-0">
+            <div class="col-11 col-sm-10 col-lg-5">
+                <span class="text-white fs-1 font-julee">TODO</span>
+                @if (ViewBag.Erro != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Ops!</strong> @ViewBag.Erro
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <div class="bg-fundo-box mt-3 px-4 py-2">
+                    <form asp-controller="Tarefas" asp-action="AddTask" method="post">
+                        <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <div class="d-flex flex-column gap-1 flex-grow-1">
+                                <input type="text" name="descricao" class="bg-fundo-box border-0 form-control-lg" placeholder="Informe a sua tarefa..." />
+                                <span class="text-danger">@Html.ValidationMessage("descricao")</span>
+                            </div>
+                            <button class="btn btn-outline-secondary border-0" type="submit">
+                                <i class="bi bi-plus-circle-fill text-cinza-claro"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div id="taskbox" class="d-flex flex-column bg-fundo-box mt-3 mt-md-5">
+                    <div id="boxlistatarefa" class="d-flex flex-column gap-1">
+                    </div>
+                    <div class="d-flex gap-1 p-4">
+                        <button id="bttodas" class="btn btn-outline-secondary border-0">Todas</button>
+                        <button id="btativas" class="btn btn-outline-secondary border-0">Ativos</button>
+                        <button id="btconcluidas" class="btn btn-outline-secondary border-0">Concluidos</button>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center gap-1 p-2 border-top borda-cinza-medio">
+                        <span class="text-cinza-claro px-4 text-capitalize"><i class="bi bi-person-fill text-cinza-claro"></i> @User.Identity.Name</span>
+                        <a href="/Auth/Logout" class="btn btn-outline-secondary border-0">Sair</a>
+                    </div>
                 </div>
             </div>
-            <div class="col-2">
-                <input class="btn btn-outline-secondary" type="submit" value="Adicionar" />
-            </div>
         </div>
-    </form>
-
-    @foreach (var tarefa in Model.Tarefas)
-    {
-        <div class="d-flex justify-content-between">
-            <p>@tarefa.Descricao</p>
-            <div class="d-flex align-items-center gap-1">
-                @if (tarefa.Concluida)
-                {
-                    <i class="bi bi-check-square-fill text-success btn"></i>
-                }
-                else
-                {
-                    <button class="btn" onclick="checkTask('@tarefa.Id', '@Model.IdUsuario')">
-                        <i class="bi bi-check-square text-dark"></i>
-                    </button>
-                }
-                <button class="btn" onclick="deleteTask('@tarefa.Id', '@Model.IdUsuario')">
-                    <i class="bi bi-trash text-danger"></i>
-                </button>
-            </div>
-        </div>
-    }
-    <div id="boxlistatarefa" class="d-flex flex-column gap-1">
-
-    </div>
-    <div class="d-flex gap-1">
-        <button id="bttodas" class="btn btn-outline-secondary">All</button>
-        <button id="btativas" class="btn btn-outline-secondary">Ativos</button>
-        <button id="btconcluidas" class="btn btn-outline-secondary">Concluidos</button>
     </div>
 </div>
 @section Scripts {
     <script>
-        var listaDeTarefas= JSON.parse('@Html.Raw(JsonSerializer.Serialize(Model.Tarefas))')
-        console.log(typeof(listaDeTarefas))
-        $('#bttodas').on('click', function(){
+        var listaDeTarefas = [];    
+        $(document).ready(function(){
+            listaDeTarefas = JSON.parse('@Html.Raw(JsonSerializer.Serialize(Model.Tarefas))')
+            $("#boxlistatarefa").empty();
             listaDeTarefas.forEach(tarefa => {
                 $('#boxlistatarefa').append(componentTarefa(tarefa.Id, tarefa.Descricao, tarefa.Concluida, tarefa.IdUsuario))
             });
+            $('#bttodas').addClass('text-primary');
+        });   
+        $('#bttodas').on('click', function(){
+            $("#boxlistatarefa").empty();
+            listaDeTarefas.forEach(tarefa => {
+                $('#boxlistatarefa').append(componentTarefa(tarefa.Id, tarefa.Descricao, tarefa.Concluida, tarefa.IdUsuario))
+            });
+            buttonActive('bttodas');
         });
+        $('#btativas').on('click', function(){
+            const tarefasAtivas = listaDeTarefas.filter(tarefa => tarefa.Concluida === false)
+            $("#boxlistatarefa").empty();
+            tarefasAtivas.map(tarefa => {
+                $('#boxlistatarefa').append(componentTarefa(tarefa.Id, tarefa.Descricao, tarefa.Concluida, tarefa.IdUsuario))
+            });
+            buttonActive('btativas');
+        });
+        $('#btconcluidas').on('click', function(){
+            const tarefasAtivas = listaDeTarefas.filter(tarefa => tarefa.Concluida === true)
+            $("#boxlistatarefa").empty();
+            tarefasAtivas.map(tarefa => {
+                $('#boxlistatarefa').append(componentTarefa(tarefa.Id, tarefa.Descricao, tarefa.Concluida, tarefa.IdUsuario))
+            });
+            buttonActive('btconcluidas');
+        });
+        function buttonActive(id){
+            $('button').each(function() {
+                $(this).removeClass('text-primary')
+            });
+            $('#' + id).addClass('text-primary')
+        }
         function componentTarefa(id, descricao, status, usuario){
             return `
-                <div class="d-flex justify-content-between">
-                    <p>${descricao}</p>
+                <div class="d-flex justify-content-between border-bottom borda-cinza-medio p-4">
                     <div class="d-flex align-items-center gap-1">
-                        ${status ? '<i class="bi bi-check-square-fill text-success btn"></i>' : '<button class="btn" onclick="checkTask(\${id}\, \${usuario}\)"><i class="bi bi-check-square text-dark"></i></button>'}
-                        <button class="btn" onclick="deleteTask(${id}, ${usuario})">
-                            <i class="bi bi-trash text-danger"></i>
-                        </button>
+                        ${status ? '<i class="bi bi-check-square-fill text-success btn"></i>' : `<button class="btn" onclick="checkTask('${id}', '${usuario}')"><i class="bi bi-check-square text-cinza-medio"></i></button>`}
+                        <p class="text-cinza-claro m-0 ${status ? 'text-cinza-escuro text-decoration-line-through' : ''}">${descricao}</p>
                     </div>
+                    <button class="btn" onclick="deleteTask('${id}', '${usuario}')">
+                        <i class="bi bi-trash text-cinza-claro"></i>
+                    </button>
                 </div>
             `
         }
-
         function checkTask(idtask, iduser){
             $.ajax({
                 url: '/Tarefas/CheckTask',
@@ -91,6 +118,7 @@
                         alert(data.mensagem);
                     }
                     location.reload();
+                    $('#desc-' + idtask).addClass('text-cinza-escuro text-decoration-line-through')
                 }
             }); 
         }
