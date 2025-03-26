@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="wwwroot\img\home\" />
       <Folder Include="wwwroot\img\tarefas\" />
     </ItemGroup>
 
