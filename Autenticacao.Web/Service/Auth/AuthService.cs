@@ -1,4 +1,5 @@
 ﻿using Autenticacao.Web.Dto.Auth;
+using Autenticacao.Web.Models;
 using Autenticacao.Web.Models.Auth;
 using Autenticacao.Web.Repositories.Auth;
 using Microsoft.AspNetCore.Authentication;
@@ -16,14 +17,19 @@ namespace Autenticacao.Web.Service.Auth
             _authRepositorie = authRepository;
             _httpContextAccessor = httpContextAccessor;
         }
-        public Usuario Login(string email, string senha)
+        public UsuarioLogadoDto Login(string email, string senha)
         {
 
             var user = _authRepositorie.Login(email, senha);
 
-            if (user.id == null)
+            if (user.status == false)
                 return user;
 
+            if (string.IsNullOrWhiteSpace(user.id))
+            {
+                user.status = false;
+                user.mensagem = "Usuário ou senha inválido";
+            }
 
             var claims = new List<Claim>
             {
@@ -39,11 +45,10 @@ namespace Autenticacao.Web.Service.Auth
 
             return user;
         }
-        public Usuario Register(RegistroUsuarioDto user)
+        public RetornoPadrao Register(RegistroUsuarioDto user)
         {
            return _authRepositorie.Register(user);
         }
-
         public void Logout()
         {
             _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

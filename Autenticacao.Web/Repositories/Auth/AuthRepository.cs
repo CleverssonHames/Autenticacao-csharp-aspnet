@@ -1,7 +1,9 @@
 ﻿using Autenticacao.Web.Dto.Auth;
+using Autenticacao.Web.Models;
 using Autenticacao.Web.Models.Auth;
 using Autenticacao.Web.Repositories.Db;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Ocsp;
 using System.Text;
 
 namespace Autenticacao.Web.Repositories.Auth
@@ -13,9 +15,9 @@ namespace Autenticacao.Web.Repositories.Auth
         {
             _db = db;
         }
-        public Usuario Login(string email, string senha)
+        public UsuarioLogadoDto Login(string email, string senha)
         {
-            var usuario = new Usuario();
+            var usuario = new UsuarioLogadoDto();
             var sql = "SELECT * FROM usuario WHERE email = @email AND senha = @senha";
 
             using (MySqlConnection con = _db.GetConnection())
@@ -32,7 +34,7 @@ namespace Autenticacao.Web.Repositories.Auth
                     {
                         if (dr.Read())
                         {
-                            usuario.id = dr.GetGuid("idusuario");
+                            usuario.id = Convert.ToString(dr.GetGuid("idusuario"));
                             usuario.nome = dr.GetString("nome");
                             usuario.email = dr.GetString("email");
                         }
@@ -40,14 +42,17 @@ namespace Autenticacao.Web.Repositories.Auth
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
+                    usuario.status = false;
+                    usuario.mensagem = $"Ocorreu um erro ao realizar o login: {ex.Message}";
                 }
                 con.Close();
             }
             return usuario;
         }
-        public Usuario Register(RegistroUsuarioDto user)
+        public RetornoPadrao Register(RegistroUsuarioDto user)
         {
+            var ret = new RetornoPadrao();
+
             var newUser = new Usuario
             {
                 nome = user.nome,
@@ -73,12 +78,13 @@ namespace Autenticacao.Web.Repositories.Auth
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
+                    ret.status = false;
+                    ret.mensagem = $"Ocorreu um erro ao realizar a inclusão: {ex.Message}";
                 }
                 con.Close();
             }
 
-            return newUser;
+            return ret;
         }
     }
 }

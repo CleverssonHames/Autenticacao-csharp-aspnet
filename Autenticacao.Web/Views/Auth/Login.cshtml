@@ -1,26 +1,45 @@
 ﻿@{
     ViewData["title"] = "Login";
 }
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center">Login</div>
-                <div class="card-body">
-                    <form action="/Auth/Login" method="post">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="senha" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="senha" name="senha" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                    </form>
-                </div>
-                <a href="/Auth/Register" class="card-footer text-center">Cadastra-se</a>
-            </div>
+<div id="page-login" class="container-fluid vh-100 g-0 position-relative">
+    <div class="d-flex flex-column h-100">
+        <div class="bg-fundo flex-grow-1"></div>
+        <div class="flex-grow-1 position-relative bg-gradient-rb">
+            <img src="~/img/auth/img-auth.jpg" class="base-image">
         </div>
+    </div>
+    <div class="position-absolute top-50 start-50 translate-middle w-100">
+        <div class="row justify-content-center g-0">
+            <div class="col-10 col-sm-8 col-md-5 col-lg-3">
+                @if (ViewBag.Erro != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Ops!</strong> @ViewBag.Erro
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <div class="card bg-fundo-box">
+                    <h3 class="text-white text-center display-5">Login</h3>
+                    <div class="card-body">
+                        <form class="mb-3" action="/Auth/Login" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label text-cinza-claro">E-mail</label>
+                                <input type="email" class="form-control bg-cinza-claro" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="senha" class="form-label text-cinza-claro">Senha</label>
+                                <input type="password" class="form-control bg-cinza-claro" id="senha" name="senha" required>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary px-4">Entrar</button>
+                            </div>
+                        </form>
+                        <div class="px-2 text-cinza-claro">
+                            Não tem cadastro? <a href="/Auth/Register">Clique aqui</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
     </div>
 </div>
