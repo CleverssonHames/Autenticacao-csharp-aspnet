@@ -42,7 +42,7 @@ namespace Autenticacao.Web.Controllers
         public IActionResult Cadastrar(RegistroUsuarioDto user)
         {
             if (ModelState.IsValid == false)
-                View("Register", user);
+                return View("Register", user);
 
             var result = _authService.Register(user);
 
